@@ -34,11 +34,21 @@ ifeq ($(strip $(TARGET_ARCH_VARIANT)),)
 TARGET_ARCH_VARIANT := armv5te
 endif
 
-ifeq ($(strip $(TARGET_GCC_VERSION_EXP)),)
-TARGET_GCC_VERSION := 4.7
+ifeq ($(strip $(TARGET_GCC_VERSION_AND)),)
+TARGET_GCC_VERSION_AND := 4.7
 else
-TARGET_GCC_VERSION := $(TARGET_GCC_VERSION_EXP)
+TARGET_GCC_VERSION_AND := $(TARGET_GCC_VERSION_AND)
 endif
+
+ifeq ($(strip $(TARGET_GCC_VERSION_ARM)),)
+TARGET_GCC_VERSION_ARM := 4.7
+else
+TARGET_GCC_VERSION_ARM := $(TARGET_GCC_VERSION_ARM)
+endif
+
+# Specify Target Custom GCC Chains to use:
+TARGET_GCC_VERSION_AND := 4.9
+TARGET_GCC_VERSION_ARM := 4.8
 
 TARGET_ARCH_SPECIFIC_MAKEFILE := $(BUILD_COMBOS)/arch/$(TARGET_ARCH)/$(TARGET_ARCH_VARIANT).mk
 ifeq ($(strip $(wildcard $(TARGET_ARCH_SPECIFIC_MAKEFILE))),)
@@ -49,7 +59,7 @@ include $(TARGET_ARCH_SPECIFIC_MAKEFILE)
 
 # You can set TARGET_TOOLS_PREFIX to get gcc from somewhere else
 ifeq ($(strip $(TARGET_TOOLS_PREFIX)),)
-TARGET_TOOLCHAIN_ROOT := prebuilts/gcc/$(HOST_PREBUILT_TAG)/arm/arm-linux-androideabi-$(TARGET_GCC_VERSION)
+TARGET_TOOLCHAIN_ROOT := prebuilts/gcc/$(HOST_PREBUILT_TAG)/arm/arm-linux-androideabi-$(TARGET_GCC_VERSION_AND)
 TARGET_TOOLS_PREFIX := $(TARGET_TOOLCHAIN_ROOT)/bin/arm-linux-androideabi-
 endif
 
@@ -68,16 +78,39 @@ endif
 
 TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
-TARGET_arm_CFLAGS :=    -O2 \
+TARGET_arm_CFLAGS :=    -O3 \
                         -fomit-frame-pointer \
-                        -fstrict-aliasing    \
-                        -funswitch-loops
+                        -fstrict-aliasing \
+                        -funswitch-loops \
+                        -fno-tree-vectorize \
+                        -fno-inline-functions \
+                        -Wstrict-aliasing=3 \
+                        -Werror=strict-aliasing \
+                        -fgcse-after-reload \
+                        -fno-ipa-cp-clone \
+                        -fno-vect-cost-model \
+                        -Wno-error=unused-parameter \
+                        -Wno-unused-parameter \
+                        -Wno-error=unused-but-set-variable \
+                        -Wno-unused-but-set-variable
 
 # Modules can choose to compile some source as thumb.
 TARGET_thumb_CFLAGS :=  -mthumb \
                         -Os \
                         -fomit-frame-pointer \
-                        -fno-strict-aliasing
+                        -fstrict-aliasing \
+                        -fno-tree-vectorize \
+                        -fno-inline-functions \
+                        -fno-unswitch-loops \
+                        -Wstrict-aliasing=3 \
+                        -Werror=strict-aliasing \
+                        -fgcse-after-reload \
+                        -fno-ipa-cp-clone \
+                        -fno-vect-cost-model \
+                        -Wno-error=unused-parameter \
+                        -Wno-unused-parameter \
+                        -Wno-error=unused-but-set-variable \
+                        -Wno-unused-but-set-variable
 
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
 # or in your environment to force a full arm build, even for
@@ -111,7 +144,11 @@ TARGET_GLOBAL_CFLAGS += \
 			-Werror=format-security \
 			-D_FORTIFY_SOURCE=1 \
 			-fno-short-enums \
-			$(arch_variant_cflags)
+			$(arch_variant_cflags) \
+			-Wno-error=unused-parameter \
+			-Wno-unused-parameter \
+			-Wno-error=unused-but-set-variable \
+			-Wno-unused-but-set-variable
 
 android_config_h := $(call select-android-config-h,linux-arm)
 TARGET_ANDROID_CONFIG_CFLAGS := -include $(android_config_h) -I $(dir $(android_config_h))
@@ -121,9 +158,11 @@ TARGET_GLOBAL_CFLAGS += $(TARGET_ANDROID_CONFIG_CFLAGS)
 # We cannot turn it off blindly since the option is not available
 # in gcc-4.4.x.  We also want to disable sincos optimization globally
 # by turning off the builtin sin function.
-ifneq ($(filter 4.6 4.6.% 4.7 4.7.%, $(TARGET_GCC_VERSION)),)
-TARGET_GLOBAL_CFLAGS += -Wno-unused-but-set-variable -fno-builtin-sin \
+ifneq ($(filter 4.6 4.6.% 4.7 4.7.% 4.8 4.8.% 4.9 4.9.%, $(TARGET_GCC_VERSION_AND)),)
+ifneq ($(filter 4.6 4.6.% 4.7 4.7.% 4.8 4.8.% 4.9 4.9.%, $(TARGET_GCC_VERSION_ARM)),)
+TARGET_GLOBAL_CFLAGS += -Wno-unused-but-set-variable -Wno-unused-parameter -fno-builtin-sin \
 			-fno-strict-volatile-bitfields
+endif
 endif
 
 # This is to avoid the dreaded warning compiler message:
@@ -153,10 +192,17 @@ TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 TARGET_RELEASE_CFLAGS := \
 			-DNDEBUG \
 			-g \
-			-Wstrict-aliasing=2 \
+			-Wstrict-aliasing=3 \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
-			-frename-registers
+			-frename-registers \
+			-Werror=strict-aliasing \
+			-fno-ipa-cp-clone \
+			-fno-vect-cost-model \
+			-Wno-error=unused-parameter \
+			-Wno-unused-parameter \
+			-Wno-error=unused-but-set-variable \
+			-Wno-unused-but-set-variable
 
 libc_root := bionic/libc
 libm_root := bionic/libm
