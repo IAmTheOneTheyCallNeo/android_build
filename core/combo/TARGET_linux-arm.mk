@@ -48,7 +48,7 @@ endif
 
 # Specify Target Custom GCC Chains to use:
 TARGET_GCC_VERSION_AND := 4.9
-TARGET_GCC_VERSION_ARM := 4.8
+TARGET_GCC_VERSION_ARM := 4.7
 
 TARGET_ARCH_SPECIFIC_MAKEFILE := $(BUILD_COMBOS)/arch/$(TARGET_ARCH)/$(TARGET_ARCH_VARIANT).mk
 ifeq ($(strip $(wildcard $(TARGET_ARCH_SPECIFIC_MAKEFILE))),)
@@ -96,7 +96,7 @@ TARGET_arm_CFLAGS :=    -O3 \
 
 # Modules can choose to compile some source as thumb.
 TARGET_thumb_CFLAGS :=  -mthumb \
-                        -Os \
+                        -O3 \
                         -fomit-frame-pointer \
                         -fstrict-aliasing \
                         -fno-tree-vectorize \
