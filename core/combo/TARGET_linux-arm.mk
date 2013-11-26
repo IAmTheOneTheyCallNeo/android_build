@@ -78,39 +78,31 @@ endif
 
 TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
-TARGET_arm_CFLAGS :=    -O3 \
+TARGET_arm_CFLAGS :=    -O2 \
                         -fomit-frame-pointer \
                         -fstrict-aliasing \
                         -funswitch-loops \
                         -fno-tree-vectorize \
                         -fno-inline-functions \
-                        -Wstrict-aliasing=3 \
-                        -Werror=strict-aliasing \
                         -fgcse-after-reload \
                         -fno-ipa-cp-clone \
                         -fno-vect-cost-model \
                         -Wno-error=unused-parameter \
-                        -Wno-unused-parameter \
-                        -Wno-error=unused-but-set-variable \
-                        -Wno-unused-but-set-variable
+                        -Wno-error=unused-but-set-variable
 
 # Modules can choose to compile some source as thumb.
 TARGET_thumb_CFLAGS :=  -mthumb \
                         -Os \
                         -fomit-frame-pointer \
-                        -fstrict-aliasing \
+                        -fno-strict-aliasing \
                         -fno-tree-vectorize \
                         -fno-inline-functions \
                         -fno-unswitch-loops \
-                        -Wstrict-aliasing=3 \
-                        -Werror=strict-aliasing \
                         -fgcse-after-reload \
                         -fno-ipa-cp-clone \
                         -fno-vect-cost-model \
                         -Wno-error=unused-parameter \
-                        -Wno-unused-parameter \
-                        -Wno-error=unused-but-set-variable \
-                        -Wno-unused-but-set-variable
+                        -Wno-error=unused-but-set-variable
 
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
 # or in your environment to force a full arm build, even for
@@ -148,9 +140,7 @@ TARGET_GLOBAL_CFLAGS += \
 			-fno-short-enums \
 			$(arch_variant_cflags) \
 			-Wno-error=unused-parameter \
-			-Wno-unused-parameter \
 			-Wno-error=unused-but-set-variable \
-			-Wno-unused-but-set-variable \
 			-include $(android_config_h) \
 			-I $(dir $(android_config_h))
 
@@ -160,7 +150,7 @@ TARGET_GLOBAL_CFLAGS += \
 # by turning off the builtin sin function.
 ifneq ($(filter 4.6 4.6.% 4.7 4.7.% 4.8 4.8.% 4.9 4.9.%, $(TARGET_GCC_VERSION_AND)),)
 ifneq ($(filter 4.6 4.6.% 4.7 4.7.% 4.8 4.8.% 4.9 4.9.%, $(TARGET_GCC_VERSION_ARM)),)
-TARGET_GLOBAL_CFLAGS += -Wno-unused-but-set-variable -Wno-unused-parameter -fno-builtin-sin \
+TARGET_GLOBAL_CFLAGS += -Wno-unused-but-set-variable -fno-builtin-sin \
 			-fno-strict-volatile-bitfields
 endif
 endif
@@ -192,18 +182,14 @@ TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 TARGET_RELEASE_CFLAGS := \
 			-DNDEBUG \
 			-g \
-			-Wstrict-aliasing=3 \
+			-Wstrict-aliasing=2 \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
 			-frename-registers \
-			-frename-registers \
-			-Werror=strict-aliasing \
 			-fno-ipa-cp-clone \
 			-fno-vect-cost-model \
 			-Wno-error=unused-parameter \
-			-Wno-unused-parameter \
-			-Wno-error=unused-but-set-variable \
-			-Wno-unused-but-set-variable
+			-Wno-error=unused-but-set-variable
 
 libc_root := bionic/libc
 libm_root := bionic/libm
