@@ -84,6 +84,8 @@ TARGET_arm_CFLAGS :=    -O2 \
                         -funswitch-loops \
                         -fno-tree-vectorize \
                         -fno-inline-functions \
+                        -Wstrict-aliasing=3 \
+                        -Werror=strict-aliasing \
                         -fgcse-after-reload \
                         -fno-ipa-cp-clone \
                         -fno-vect-cost-model \
@@ -94,10 +96,12 @@ TARGET_arm_CFLAGS :=    -O2 \
 TARGET_thumb_CFLAGS :=  -mthumb \
                         -Os \
                         -fomit-frame-pointer \
-                        -fno-strict-aliasing \
+                        -fstrict-aliasing \
                         -fno-tree-vectorize \
                         -fno-inline-functions \
                         -fno-unswitch-loops \
+                        -Wstrict-aliasing=3 \
+                        -Werror=strict-aliasing \
                         -fgcse-after-reload \
                         -fno-ipa-cp-clone \
                         -fno-vect-cost-model \
@@ -174,15 +178,17 @@ TARGET_GLOBAL_LDFLAGS += \
 			-Wl,--icf=safe \
 			$(arch_variant_ldflags)
 
-TARGET_GLOBAL_CFLAGS += -mthumb-interwork
+TARGET_GLOBAL_CFLAGS += -mthumb-interwork -fstrict-aliasing
 
-TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
+TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden -fstrict-aliasing
 
 # More flags/options can be added here
 TARGET_RELEASE_CFLAGS := \
 			-DNDEBUG \
 			-g \
-			-Wstrict-aliasing=2 \
+			-Wstrict-aliasing=3
+			-Werror=strict-aliasing \
+			-fstrict-aliasing \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
 			-frename-registers \
