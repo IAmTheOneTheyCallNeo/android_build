@@ -31,6 +31,7 @@ PRODUCT_PACKAGES := \
 	librs_jni \
 	LiveWallpapersPicker \
 	Mms \
+	Music \
 	rild \
 	screenrecord \
 	SdkSetup \

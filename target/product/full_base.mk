@@ -23,6 +23,10 @@ PRODUCT_PACKAGES := \
     libfwdlockengine \
     WAPPushManager
 
+PRODUCT_PACKAGES += \
+    LiveWallpapers \
+    LiveWallpapersPicker
+
 # Additional settings used in all AOSP builds
 PRODUCT_PROPERTY_OVERRIDES := \
     ro.config.ringtone=Ring_Synth_04.ogg \
