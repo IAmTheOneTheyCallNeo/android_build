@@ -21,10 +21,10 @@
 # core_tiny.mk in addition to core_minimal.mk.
 
 PRODUCT_PACKAGES += \
-    BasicDreams \
     BlockedNumberProvider \
     BookmarkProvider \
     BuiltInPrintService \
+    Calendar \
     CalendarProvider \
     CaptivePortalLogin \
     CertInstaller \
@@ -32,6 +32,7 @@ PRODUCT_PACKAGES += \
     DeskClock \
     DocumentsUI \
     DownloadProviderUi \
+    Email \
     ExactCalculator \
     ExternalStorageProvider \
     FusedLocation \
@@ -53,7 +54,6 @@ PRODUCT_PACKAGES += \
     Telecom \
     TeleService \
     VpnDialogs \
-    vr \
     MmsService
 
 # The set of packages whose code can be loaded by the system server.

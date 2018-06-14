@@ -17,13 +17,11 @@
 PRODUCT_PROPERTY_OVERRIDES :=
 
 PRODUCT_PACKAGES := \
-	ApiDemos \
 	CellBroadcastReceiver \
 	CubeLiveWallpapers \
 	CustomLocale \
 	Development \
 	Dialer \
-	EmulatorSmokeTests \
 	Gallery2 \
 	GestureBuilder \
 	Launcher3 \
@@ -31,16 +29,14 @@ PRODUCT_PACKAGES := \
 	librs_jni \
 	LiveWallpapersPicker \
 	Mms \
+	Music \
 	rild \
 	screenrecord \
 	SdkSetup \
-	SmokeTest \
-	SmokeTestApp \
 	SoftKeyboard \
 	sqlite3 \
 	SystemUI \
 	SysuiDarkThemeOverlay \
-	EasterEgg \
 	WallpaperPicker \
 	WidgetPreview
 

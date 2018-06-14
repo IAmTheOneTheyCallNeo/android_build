@@ -21,12 +21,14 @@
 
 PRODUCT_PACKAGES := \
     libfwdlockengine \
-    WAPPushManager
+    WAPPushManager \
+    LiveWallpapers \
+    LiveWallpapersPicker
 
 # Additional settings used in all AOSP builds
 PRODUCT_PROPERTY_OVERRIDES := \
-    ro.config.ringtone=Ring_Synth_04.ogg \
-    ro.config.notification_sound=pixiedust.ogg
+    ro.config.ringtone=Alice.ogg \
+    ro.config.notification_sound=Duet.ogg
 
 # Put en_US first in the list, so make it default.
 PRODUCT_LOCALES := en_US
